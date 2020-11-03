@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+    server:
+        build:
+            context: .
+            dockerfile: ./provisioning/dev/Dockerfile-server
+            args:
+                PROJECT_NAME: nodejs-project-starter
+        image: nodejs-project-starter
+        ports:
+            - "127.0.0.1:3000:3000"
+        restart: always
+        volumes:
+            - .:/var/opt/nodejs-project-starter
+        user: "dev:dev"

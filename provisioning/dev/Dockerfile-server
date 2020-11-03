@@ -1,0 +1,42 @@
+FROM ubuntu:18.04
+
+ARG PROJECT_NAME
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV SUDOERS /etc/sudoers
+ENV DEV_USER dev
+
+RUN apt-get update -y && apt-get upgrade -y
+
+RUN apt-get install -y npm \
+    curl \
+    git \
+    bash \
+    nano \
+    wget \
+    sudo
+
+RUN useradd \
+    --shell /bin/bash \
+    --create-home --base-dir /home \
+    --user-group \
+    --groups sudo,ssh \
+    --password '' \
+    ${DEV_USER}
+
+RUN chmod u+w ${SUDOERS} && \
+    echo '${DEV_USER}   ALL=(ALL:ALL) NOPASSWD: ALL' >> ${SUDOERS} && \
+    chmod u-w ${SUDOERS}
+
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
+
+WORKDIR /var/opt/$PROJECT_NAME
+
+COPY . .
+
+RUN npm install -g yarn
+
+RUN yarn install
+
+CMD [ "npm", "run", "dev" ]
