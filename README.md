@@ -1,4 +1,4 @@
-# TINY ADSERVER
+# NODE JS STARTER PROJECT
 
 > A Node JS (latest LTS) environment to start a project
 
